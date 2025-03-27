@@ -62,6 +62,7 @@ void checkNum(int check, std::string type)
 
 int main()
 {
+while(true) {
     std::srand(std::time(0));
     std::cout << "Begin game, player black\n";
     for (int i = 0; i < 10; i++)
@@ -109,9 +110,5 @@ int main()
     {
         std::cout << "Player white and black have ended in a draw!" << std::endl;
     }
-    while (true)
-    {
-
-    }
-    return 0;
+   }
 }
