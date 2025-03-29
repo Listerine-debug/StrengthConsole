@@ -5,8 +5,8 @@
 #include <random>
 #include <ctime>
 
-std::vector<int> black_cards = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-std::vector<int> white_cards = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+std::vector<int> black_cards;
+std::vector<int> white_cards;
 
 int player_black;
 int player_white;
@@ -17,6 +17,11 @@ int white_card;
 int player_black_score = 0;
 int player_white_score = 0;
 int tie_score = 0;
+
+void refillDecks() {
+    black_cards = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    white_cards = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+}
 
 void checkNum(int check, std::string type)
 {
@@ -62,53 +67,59 @@ void checkNum(int check, std::string type)
 
 int main()
 {
-while(true) {
     std::srand(std::time(0));
-    std::cout << "Begin game, player black\n";
-    for (int i = 0; i < 10; i++)
-    {
-        std::cout << "Enter a number for player black: ";
-        while (!(std::cin >> player_black)) {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Invalid input. Please enter a valid number: ";
-        }
-        checkNum(player_black, "player_black");
 
-        if (!white_cards.empty())
+    while (true) {
+        refillDecks(); 
+        player_black_score = 0;
+        player_white_score = 0;
+        tie_score = 0;
+
+        std::cout << "Begin game, player black\n";
+        for (int i = 0; i < 10; i++)
         {
-            player_white = white_cards[std::rand() % white_cards.size()];
-            checkNum(player_white, "player_white");
+            std::cout << "Enter a number for player black: ";
+            while (!(std::cin >> player_black)) {
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "Invalid input. Please enter a valid number: ";
+            }
+            checkNum(player_black, "player_black");
+
+            if (!white_cards.empty())
+            {
+                player_white = white_cards[std::rand() % white_cards.size()];
+                checkNum(player_white, "player_white");
+            }
+
+            if (black_card > white_card)
+            {
+                std::cout << "Player black scores\n";
+                player_black_score++;
+            }
+            else if (black_card < white_card)
+            {
+                std::cout << "Player white scores\n";
+                player_white_score++;
+            }
+            else
+            {
+                std::cout << "Tie between players\n";
+                tie_score++;
+            }
         }
 
-        if (black_card > white_card)
+        if (player_black_score > player_white_score)
         {
-            std::cout << "Player black scores\n";
-            player_black_score++;
+            std::cout << "Player black wins, player white loses!" << std::endl;
         }
-        else if (black_card < white_card)
+        else if (player_black_score < player_white_score)
         {
-            std::cout << "Player white scores\n";
-            player_white_score++;
+            std::cout << "Player white wins, player black loses!" << std::endl;
         }
         else
         {
-            std::cout << "Tie between players\n";
-            tie_score++;
+            std::cout << "Player white and black have ended in a draw!" << std::endl;
         }
     }
-
-    if (player_black_score > player_white_score)
-    {
-        std::cout << "Player black wins, player white loses!" << std::endl;
-    }
-    else if (player_black_score < player_white_score)
-    {
-        std::cout << "Player white wins, player black loses!" << std::endl;
-    }
-    else
-    {
-        std::cout << "Player white and black have ended in a draw!" << std::endl;
-    }
-   }
 }
